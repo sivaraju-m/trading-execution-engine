@@ -1,0 +1,3 @@
+[console_scripts]
+execution-engine = trading_execution_engine.bin.automated_trading_system:main
+live-trading = trading_execution_engine.bin.live_trading_flow:main

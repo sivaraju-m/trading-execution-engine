@@ -1,0 +1,60 @@
+Metadata-Version: 2.4
+Name: trading-execution-engine
+Version: 0.1.0
+Summary: Trading execution engine for placing and managing orders through various brokers
+Home-page: https://github.com/yourusername/trading-execution-engine
+Author: Your Name
+Author-email: your.email@example.com
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Requires-Dist: pandas>=1.5.0
+Requires-Dist: numpy>=1.22.0
+Requires-Dist: kiteconnect>=4.1.0
+Requires-Dist: shared-services>=0.1.0
+Requires-Dist: pyyaml>=6.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
+# Trading Execution Engine
+
+A modular trading execution engine for placing and managing orders through various brokers.
+
+## Features
+
+- Multiple broker integrations (Zerodha, Angel One, etc.)
+- Order management and validation
+- Real-time execution tracking
+- SEBI compliance checks
+- Paper trading mode
+
+## Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/trading-execution-engine.git
+cd trading-execution-engine
+
+# Install the package
+pip install -e .
+```
+
+## Usage
+
+```bash
+# Run in simulation mode
+execution-engine --config config/execution_config.yaml --mode simulation
+
+# Run with paper trading
+execution-engine --config config/execution_config.yaml --mode paper
+
+# Run with live trading (use with caution)
+execution-engine --config config/execution_config.yaml --mode live
+```
+
+See documentation for more details.
