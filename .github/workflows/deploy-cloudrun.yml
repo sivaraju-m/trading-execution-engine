@@ -1,0 +1,109 @@
+name: Deploy Trading Execution Engine to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'Dockerfile.simple'
+      - '.github/workflows/deploy-cloudrun.yml'
+      - 'requirements.txt'
+      - 'setup.py'
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID || 'ai-trading-gcp-459813' }}
+  REGION: us-central1
+  SERVICE_NAME: trading-execution-engine
+  REGISTRY: gcr.io
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential curl ca-certificates
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 pytest black
+          # Install simplified requirements without TA-Lib
+          sed '/ta-lib/d' requirements.txt > requirements-simple.txt
+          sed '/pandas-ta/d' requirements-simple.txt > requirements-final.txt
+          if [ -f requirements-final.txt ]; then pip install -r requirements-final.txt; fi
+
+      - name: Lint with flake8
+        run: |
+          # stop the build if there are Python syntax errors or undefined names
+          flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+          # exit-zero treats all errors as warnings
+          flake8 src --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+      - name: Format check with Black
+        run: |
+          black --check src
+
+  build-and-deploy:
+    needs: [lint-and-test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker to use gcloud
+        run: gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: |
+          docker build -f Dockerfile.simple -t ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} .
+          docker tag ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:latest
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:latest
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
+            --platform managed \
+            --region ${{ env.REGION }} \
+            --allow-unauthenticated \
+            --port 8080 \
+            --cpu 2 \
+            --memory 2Gi \
+            --max-instances 10 \
+            --set-env-vars ENVIRONMENT=production,PAPER_TRADING=true,SEBI_COMPLIANCE=enabled,LOG_LEVEL=INFO
+
+      - name: Test deployment
+        run: |
+          SERVICE_URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} --region=${{ env.REGION }} --format='value(status.url)')
+          echo "Service deployed at: $SERVICE_URL"
+          
+          # Wait for service to be ready
+          sleep 30
+          
+          # Test health endpoint
+          curl -f "$SERVICE_URL/health" || exit 1
+          echo "✅ Trading Execution Engine deployed successfully!"
