@@ -133,6 +133,20 @@ def get_strategy_logger() -> logging.Logger:
     return setup_logger("ai_trading_machine.strategy")
 
 
+def get_logger(name: str, level: Optional[str] = None) -> logging.Logger:
+    """
+    Get a configured logger for the trading execution engine
+
+    Args:
+        name: Logger name (usually __name__)
+        level: Logging level (DEBUG, INFO, WARNING, ERROR)
+
+    Returns:
+        Configured logger instance
+    """
+    return setup_logger(name, level)
+
+
 # Configure root logger for the package
 def configure_package_logging():
     """Configure logging for the entire AI Trading Machine package."""

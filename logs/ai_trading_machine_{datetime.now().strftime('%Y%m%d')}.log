@@ -1,0 +1,23 @@
+2025-07-19 10:55:53 - src.trading_execution_engine.utils.market_hours - INFO - Market hours validator initialized for Indian markets
+2025-07-19 10:55:53 - src.trading_execution_engine.risk.manager - INFO - Risk management system initialized
+2025-07-19 10:55:53 - src.trading_execution_engine.execution.paper_trader - INFO - Paper trader initialized with capital: ₹1,000,000.00
+2025-07-19 10:55:53 - src.trading_execution_engine.execution.manual_interface - INFO - Manual execution interface initialized
+2025-07-19 10:55:53 - src.trading_execution_engine.monitoring.performance_tracker - INFO - Execution performance tracker initialized
+2025-07-19 10:55:53 - src.trading_execution_engine.core.scheduler - INFO - Trading scheduler initialized
+2025-07-19 10:55:53 - __main__ - INFO - Daily Trading Scheduler initialized
+2025-07-19 10:55:53 - __main__ - INFO - Running in dry-run mode - no trades will be executed
+2025-07-19 10:55:53 - __main__ - INFO - Starting daily trading cycle
+2025-07-19 10:55:53 - __main__ - INFO - Market is closed today - skipping trading cycle
+2025-07-19 10:58:34 - src.trading_execution_engine.utils.market_hours - INFO - Market hours validator initialized for Indian markets
+2025-07-19 10:58:34 - src.trading_execution_engine.risk.manager - INFO - Risk management system initialized
+2025-07-19 10:58:34 - src.trading_execution_engine.execution.paper_trader - INFO - Paper trader initialized with capital: ₹1,000,000.00
+2025-07-19 10:58:34 - src.trading_execution_engine.execution.manual_interface - INFO - Manual execution interface initialized
+2025-07-19 10:58:34 - src.trading_execution_engine.monitoring.performance_tracker - INFO - Execution performance tracker initialized
+2025-07-19 10:58:34 - src.trading_execution_engine.core.scheduler - INFO - Trading scheduler initialized
+2025-07-19 10:58:34 - __main__ - INFO - Daily Trading Scheduler initialized
+2025-07-19 10:58:34 - __main__ - INFO - Running in dry-run mode - no trades will be executed
+2025-07-19 10:58:34 - __main__ - INFO - Starting daily trading cycle
+2025-07-19 10:58:34 - __main__ - INFO - Market is closed today - skipping trading cycle
+2025-07-19 11:05:48 - src.trading_execution_engine.utils.market_hours - INFO - Market hours validator initialized for Indian markets
+2025-07-19 11:05:48 - src.trading_execution_engine.risk.manager - INFO - Risk management system initialized
+2025-07-19 11:05:48 - src.trading_execution_engine.execution.paper_trader - INFO - Paper trader initialized with capital: ₹1,000,000.00

@@ -1,0 +1,82 @@
+# Multi-stage Docker build for Trading Execution Engine with Conda
+FROM continuumio/miniconda3:latest as builder
+
+# Set build arguments
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION=latest
+
+# Add metadata
+LABEL maintainer="AI Trading Machine Team" \
+      org.label-schema.build-date=$BUILD_DATE \
+      org.label-schema.vcs-ref=$VCS_REF \
+      org.label-schema.version=$VERSION \
+      org.label-schema.name="trading-execution-engine" \
+      org.label-schema.description="SEBI-compliant trading execution engine for production deployment"
+
+# Update conda and install TA-Lib and other dependencies
+RUN conda update -n base -c defaults conda && \
+    conda install -c conda-forge ta-lib numpy pandas scikit-learn && \
+    conda clean -afy
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install additional Python dependencies
+COPY requirements.txt requirements-dev.txt ./
+
+# Install additional pip packages
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy source code
+COPY . .
+
+# Install package in development mode
+RUN pip install -e .
+
+# Production stage
+FROM continuumio/miniconda3:latest as production
+
+# Copy conda environment from builder
+COPY --from=builder /opt/conda /opt/conda
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    curl \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
+RUN useradd --create-home --shell /bin/bash trader && \
+    mkdir -p /app/logs /app/data && \
+    chown -R trader:trader /app
+
+# Set working directory
+WORKDIR /app
+
+# Copy application code
+COPY --from=builder /app /app
+
+# Set ownership to non-root user
+RUN chown -R trader:trader /app
+
+# Switch to non-root user
+USER trader
+
+# Health check for SEBI compliance monitoring
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD python -c "import trading_execution_engine; print('Service healthy')" || exit 1
+
+# Environment variables for production
+ENV PYTHONPATH=/app \
+    PYTHONUNBUFFERED=1 \
+    ENVIRONMENT=production \
+    LOG_LEVEL=INFO \
+    SEBI_COMPLIANCE=enabled \
+    PAPER_TRADING=true
+
+# Expose port for health checks and API
+EXPOSE 8080
+
+# Default command for production (SEBI-compliant paper trading)
+CMD ["python", "-m", "trading_execution_engine.main"]

@@ -1,0 +1,168 @@
+# Daily Trading Scheduler Configuration
+# ===================================
+
+scheduler:
+  # Market timing (IST)
+  market_open_time: "09:15"
+  market_close_time: "15:30"
+  pre_market_start: "09:00"
+  post_market_end: "16:00"
+  
+  # Signal processing
+  signal_check_interval: 300  # 5 minutes
+  max_daily_trades: 20
+  
+  # Automation settings
+  auto_paper_trading: true
+  auto_manual_interface: true
+
+paper_trading:
+  enabled: true
+  initial_capital: 1000000  # 10 Lakh
+  commission_per_trade: 20
+  slippage_bps: 5  # 5 basis points
+  
+  # Paper trading specific settings
+  simulate_market_impact: true
+  use_realistic_fills: true
+
+manual_trading:
+  enabled: true
+  require_confirmation: true
+  max_order_value: 50000  # 50K per order
+  cooling_period_minutes: 5
+  
+  # SEBI compliance settings
+  manual_execution_required: true
+  audit_all_signals: true
+  user_discretion_mode: true
+
+risk_management:
+  # Position limits
+  max_position_size_pct: 5
+  max_daily_loss_pct: 3
+  stop_loss_pct: 2
+  max_concentration_pct: 20
+  
+  # Portfolio settings
+  total_capital: 1000000  # 10 Lakh
+  
+  # Risk monitoring
+  real_time_monitoring: true
+  violation_alerts: true
+
+performance:
+  track_metrics: true
+  generate_daily_reports: true
+  
+  # Alert thresholds
+  alert_thresholds:
+    daily_loss_pct: 2
+    drawdown_pct: 5
+    low_success_rate: 0.4
+  
+  # Reporting settings
+  save_detailed_logs: true
+  export_to_cloud: false  # Set to true for cloud storage
+
+data_sources:
+  # Path to strategy signals (relative to trading-execution-engine)
+  strategy_signals_path: "../strategy-engine/outputs/daily_signals.json"
+  
+  # Market data source
+  market_data_source: "shared-services"
+  
+  # Backup data sources
+  backup_sources:
+    - "kite"
+    - "yahoo_finance"
+
+universe:
+  # Trading universe (matches strategy-engine config)
+  symbols:
+    - "RELIANCE.NS"
+    - "TCS.NS"
+    - "HDFCBANK.NS"
+    - "INFY.NS"
+    - "HINDUNILVR.NS"
+    - "ICICIBANK.NS"
+    - "SBIN.NS"
+    - "BHARTIARTL.NS"
+    - "ITC.NS"
+    - "KOTAKBANK.NS"
+    - "LT.NS"
+    - "HCLTECH.NS"
+    - "ASIANPAINT.NS"
+    - "MARUTI.NS"
+    - "AXISBANK.NS"
+    - "TITAN.NS"
+    - "SUNPHARMA.NS"
+    - "ULTRACEMCO.NS"
+    - "WIPRO.NS"
+    - "ONGC.NS"
+
+strategies:
+  # Enabled strategies (should match strategy-engine)
+  enabled:
+    - "rsi"
+    - "momentum"
+    - "bollinger_bands"
+    - "ma_crossover"
+    - "macd"
+  
+  # Strategy-specific settings
+  rsi:
+    enabled: true
+    max_signals_per_day: 5
+  
+  momentum:
+    enabled: true
+    max_signals_per_day: 3
+  
+  bollinger_bands:
+    enabled: true
+    max_signals_per_day: 4
+
+compliance:
+  # SEBI compliance settings
+  sebi_compliant: true
+  manual_execution_only: true
+  comprehensive_audit: true
+  
+  # Regulatory requirements
+  maintain_audit_trail: true
+  log_all_decisions: true
+  require_user_approval: true
+  
+  # Reporting requirements
+  daily_compliance_report: true
+  regulatory_notifications: false
+
+notifications:
+  # Notification settings
+  email_alerts: false
+  sms_alerts: false
+  console_notifications: true
+  
+  # Alert types
+  high_priority_alerts:
+    - "risk_violation"
+    - "daily_loss_limit"
+    - "system_error"
+  
+  medium_priority_alerts:
+    - "signal_received"
+    - "trade_executed"
+    - "performance_milestone"
+
+logging:
+  # Logging configuration
+  level: "INFO"
+  
+  # Log destinations
+  console_logging: true
+  file_logging: true
+  
+  # Log retention
+  max_log_files: 30
+  rotate_daily: true
