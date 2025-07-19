@@ -9,7 +9,6 @@ setup(
         "pandas>=1.5.0",
         "numpy>=1.22.0",
         "kiteconnect>=4.1.0",
-        "shared-services>=0.1.0",
         "pyyaml>=6.0",
     ],
     python_requires=">=3.11",

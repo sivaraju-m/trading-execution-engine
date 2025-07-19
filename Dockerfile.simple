@@ -42,6 +42,9 @@ RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
 # Copy source code
 COPY . .
 
+# Install the package in editable mode
+RUN pip install -e .
+
 # Set ownership to non-root user
 RUN chown -R trader:trader /app
 
