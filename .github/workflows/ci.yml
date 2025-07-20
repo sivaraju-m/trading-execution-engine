@@ -1,3 +1,7 @@
+# This workflow runs CI checks for the trading-execution-engine project.
+# It installs dependencies, runs linting, type checks, and tests on every push or PR to main. 
+# It also builds and deploys the application to Google Cloud Run on pushes to main.
+
 name: CI
 
 on:
@@ -10,7 +14,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
@@ -18,7 +22,8 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r requirements-dev.txt
+        pip install -r requirements-ci.txt
+        pip install pytest pytest-cov flake8 black mypy isort
         pip install -e .
     - name: Lint with black
       run: |
