@@ -132,7 +132,7 @@ def main():
         # Run the server
         uvicorn.run(
             app,
-            host="0.0.0.0",
+            host="0.0.0.0",  # nosec B104 - Required for container deployment
             port=port,
             log_level="info",
             access_log=True

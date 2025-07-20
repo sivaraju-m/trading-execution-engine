@@ -30,6 +30,15 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
+
+    - name: Install TA-Lib system dependencies
+      run: |
+        wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+        tar -xzf ta-lib-0.4.0-src.tar.gz
+        cd ta-lib/
+        ./configure --prefix=/usr
+        make
+        sudo make install
         python-version: ${{ matrix.python-version }}
     
     - name: Cache pip dependencies
@@ -79,6 +88,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
+
+    - name: Install TA-Lib system dependencies
+      run: |
+        wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+        tar -xzf ta-lib-0.4.0-src.tar.gz
+        cd ta-lib/
+        ./configure --prefix=/usr
+        make
+        sudo make install
         python-version: 3.11
     
     - name: Install dependencies
@@ -119,6 +137,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
+
+    - name: Install TA-Lib system dependencies
+      run: |
+        wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+        tar -xzf ta-lib-0.4.0-src.tar.gz
+        cd ta-lib/
+        ./configure --prefix=/usr
+        make
+        sudo make install
         python-version: 3.11
     
     - name: Install dependencies
@@ -172,6 +199,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
+
+    - name: Install TA-Lib system dependencies
+      run: |
+        wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+        tar -xzf ta-lib-0.4.0-src.tar.gz
+        cd ta-lib/
+        ./configure --prefix=/usr
+        make
+        sudo make install
         python-version: 3.11
     
     - name: Install dependencies
@@ -229,6 +265,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
+
+    - name: Install TA-Lib system dependencies
+      run: |
+        wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+        tar -xzf ta-lib-0.4.0-src.tar.gz
+        cd ta-lib/
+        ./configure --prefix=/usr
+        make
+        sudo make install
         python-version: 3.11
     
     - name: Install security tools
@@ -285,6 +330,15 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
+
+    - name: Install TA-Lib system dependencies
+      run: |
+        wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+        tar -xzf ta-lib-0.4.0-src.tar.gz
+        cd ta-lib/
+        ./configure --prefix=/usr
+        make
+        sudo make install
         python-version: 3.11
     
     - name: Install dependencies

@@ -1,0 +1,48 @@
+# Core dependencies
+fastapi==0.115.14
+uvicorn==0.35.0
+pydantic==2.11.7
+pydantic-core==2.33.2
+starlette==0.46.2
+anyio==4.9.0
+
+# Trading and Finance
+kiteconnect==5.0.1
+yfinance==0.2.63
+pandas==2.3.0
+numpy==2.3.1
+
+# Database
+peewee==3.18.1
+SQLAlchemy==2.0.41
+
+# HTTP and API
+aiohttp==3.12.13
+httpx==0.28.1
+requests==2.32.3
+
+# Async and messaging
+asyncio-mqtt==0.16.2
+paho-mqtt==2.1.0
+
+# Task scheduling
+APScheduler==3.11.0
+schedule==1.2.2
+
+# Configuration and environment
+python-dotenv==1.1.0
+PyYAML==6.0.2
+
+# Logging and monitoring
+structlog==25.4.0
+sentry-sdk==2.32.0
+
+# Data processing
+scikit-learn==1.7.0
+scipy==1.16.0
+
+# Utilities
+python-dateutil==2.9.0.post0
+pytz==2025.2
+typing-extensions==4.14.0
+
