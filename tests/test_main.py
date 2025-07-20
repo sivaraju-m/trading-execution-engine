@@ -8,6 +8,7 @@ import pytest
 def test_basic_import():
     """Test that basic imports work."""
     import sys
+
     assert sys.version_info >= (3, 11)
 
 

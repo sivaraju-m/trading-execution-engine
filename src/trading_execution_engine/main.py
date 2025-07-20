@@ -22,14 +22,18 @@ log_handlers = [logging.StreamHandler(sys.stdout)]
 # Only add file handler if running in container or logs directory exists
 log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../logs")
 if os.path.exists("/app/logs") or os.path.exists(log_dir):
-    log_path = "/app/logs/trading_execution.log" if os.path.exists("/app/logs") else os.path.join(log_dir, "trading_execution.log")
+    log_path = (
+        "/app/logs/trading_execution.log"
+        if os.path.exists("/app/logs")
+        else os.path.join(log_dir, "trading_execution.log")
+    )
     os.makedirs(os.path.dirname(log_path), exist_ok=True)
-    log_handlers.append(logging.FileHandler(log_path, mode='a'))
+    log_handlers.append(logging.FileHandler(log_path, mode="a"))
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=log_handlers
+    handlers=log_handlers,
 )
 
 logger = logging.getLogger(__name__)
@@ -38,7 +42,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI(
     title="Trading Execution Engine",
     description="SEBI-compliant trading execution engine for paper trading",
-    version="0.1.0"
+    version="0.1.0",
 )
 
 # Add CORS middleware
@@ -50,6 +54,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
     """Root endpoint for health checks."""
@@ -58,8 +63,9 @@ async def root():
         "status": "healthy",
         "version": "0.1.0",
         "paper_trading": True,
-        "sebi_compliance": True
+        "sebi_compliance": True,
     }
+
 
 @app.get("/health")
 async def health_check():
@@ -70,10 +76,11 @@ async def health_check():
             "execution_engine": "running",
             "risk_management": "active",
             "order_management": "ready",
-            "compliance": "enabled"
+            "compliance": "enabled",
         },
-        "paper_trading_mode": True
+        "paper_trading_mode": True,
     }
+
 
 @app.get("/status")
 async def get_status():
@@ -86,21 +93,23 @@ async def get_status():
         "connections": {
             "broker_api": "ready",
             "market_data": "ready",
-            "risk_service": "ready"
-        }
+            "risk_service": "ready",
+        },
     }
+
 
 class GracefulShutdown:
     """Handle graceful shutdown of the application."""
-    
+
     def __init__(self):
         self.shutdown = False
         signal.signal(signal.SIGINT, self._exit_gracefully)
         signal.signal(signal.SIGTERM, self._exit_gracefully)
-    
+
     def _exit_gracefully(self, signum, frame):
         logger.info(f"Received signal {signum}, initiating graceful shutdown...")
         self.shutdown = True
+
 
 async def startup_event():
     """Application startup event."""
@@ -108,39 +117,43 @@ async def startup_event():
     logger.info("Running in PAPER TRADING mode - SEBI compliant")
     logger.info("All systems initialized successfully")
 
+
 async def shutdown_event():
     """Application shutdown event."""
     logger.info("Trading Execution Engine shutting down...")
     logger.info("All services stopped gracefully")
 
+
 # Add event handlers
 app.add_event_handler("startup", startup_event)
 app.add_event_handler("shutdown", shutdown_event)
+
 
 def main():
     """Main function to run the application."""
     try:
         logger.info("Starting Trading Execution Engine...")
-        
+
         # Initialize graceful shutdown handler
         shutdown_handler = GracefulShutdown()
-        
+
         # Get port from environment variable (Cloud Run sets PORT)
         port = int(os.environ.get("PORT", 8080))
         logger.info(f"Starting server on port {port}")
-        
+
         # Run the server
         uvicorn.run(
             app,
             host="0.0.0.0",  # nosec B104 - Required for container deployment
             port=port,
             log_level="info",
-            access_log=True
+            access_log=True,
         )
-        
+
     except Exception as e:
         logger.error(f"Failed to start Trading Execution Engine: {e}")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
