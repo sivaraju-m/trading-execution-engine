@@ -1,3 +1,16 @@
+# ----------------------------------------------
+# GitHub Actions Workflow: Deploy to Cloud Run
+# ----------------------------------------------
+# This workflow lints, tests, builds, and deploys
+# the Trading Execution Engine to Google Cloud Run.
+# ----------------------------------------------
+# This file is triggered on pushes to the main branch
+# and on manual dispatch. It includes steps for
+# linting, testing, building Docker images, and deploying
+# to Cloud Run with appropriate configurations.
+# It also includes environment variable settings for production.    
+# ----------------------------------------------
+
 name: Deploy Trading Execution Engine to Cloud Run
 
 on:

@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """
 Main entry point for the Trading Execution Engine.
+This script initializes the FastAPI application and sets up the necessary endpoints
+for trading execution, risk management, and compliance.
 """
 
 import asyncio
@@ -15,13 +17,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 # Setup basic logging
+log_handlers = [logging.StreamHandler(sys.stdout)]
+
+# Only add file handler if running in container or logs directory exists
+log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "../../logs")
+if os.path.exists("/app/logs") or os.path.exists(log_dir):
+    log_path = "/app/logs/trading_execution.log" if os.path.exists("/app/logs") else os.path.join(log_dir, "trading_execution.log")
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    log_handlers.append(logging.FileHandler(log_path, mode='a'))
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-    handlers=[
-        logging.StreamHandler(sys.stdout),
-        logging.FileHandler("/app/logs/trading_execution.log")
-    ]
+    handlers=log_handlers
 )
 
 logger = logging.getLogger(__name__)
